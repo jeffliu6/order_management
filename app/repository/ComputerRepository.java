@@ -1,7 +1,7 @@
 package repository;
 
 import io.ebean.*;
-import models.Computer;
+import models.Entry;
 import play.db.ebean.EbeanConfig;
 
 import javax.inject.Inject;
@@ -34,9 +34,9 @@ public class ComputerRepository {
      * @param order    Sort order (either or asc or desc)
      * @param filter   Filter applied on the name column
      */
-    public CompletionStage<PagedList<Computer>> page(int page, int pageSize, String sortBy, String order, String filter) {
+    public CompletionStage<PagedList<Entry>> page(int page, int pageSize, String sortBy, String order, String filter) {
         return supplyAsync(() ->
-                ebeanServer.find(Computer.class).where()
+                ebeanServer.find(Entry.class).where()
                     .ilike("name", "%" + filter + "%")
                     .orderBy(sortBy + " " + order)
                     .fetch("company")
@@ -45,16 +45,16 @@ public class ComputerRepository {
                     .findPagedList(), executionContext);
     }
 
-    public CompletionStage<Optional<Computer>> lookup(Long id) {
-        return supplyAsync(() -> Optional.ofNullable(ebeanServer.find(Computer.class).setId(id).findOne()), executionContext);
+    public CompletionStage<Optional<Entry>> lookup(Long id) {
+        return supplyAsync(() -> Optional.ofNullable(ebeanServer.find(Entry.class).setId(id).findOne()), executionContext);
     }
 
-    public CompletionStage<Optional<Long>> update(Long id, Computer newComputerData) {
+    public CompletionStage<Optional<Long>> update(Long id, Entry newComputerData) {
         return supplyAsync(() -> {
             Transaction txn = ebeanServer.beginTransaction();
             Optional<Long> value = Optional.empty();
             try {
-                Computer savedComputer = ebeanServer.find(Computer.class).setId(id).findOne();
+            	Entry savedComputer = ebeanServer.find(Entry.class).setId(id).findOne();
                 if (savedComputer != null) {
                     savedComputer.company = newComputerData.company;
                     savedComputer.discontinued = newComputerData.discontinued;
@@ -75,7 +75,7 @@ public class ComputerRepository {
     public CompletionStage<Optional<Long>>  delete(Long id) {
         return supplyAsync(() -> {
             try {
-                final Optional<Computer> computerOptional = Optional.ofNullable(ebeanServer.find(Computer.class).setId(id).findOne());
+                final Optional<Entry> computerOptional = Optional.ofNullable(ebeanServer.find(Entry.class).setId(id).findOne());
                 computerOptional.ifPresent(Model::delete);
                 return computerOptional.map(c -> c.id);
             } catch (Exception e) {
@@ -84,7 +84,7 @@ public class ComputerRepository {
         }, executionContext);
     }
 
-    public CompletionStage<Long> insert(Computer computer) {
+    public CompletionStage<Long> insert(Entry computer) {
         return supplyAsync(() -> {
              computer.id = System.currentTimeMillis(); // not ideal, but it works
              ebeanServer.insert(computer);

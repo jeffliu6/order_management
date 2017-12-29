@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Computer;
+import models.Entry;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
@@ -44,14 +44,14 @@ public class HomeController extends Controller {
     );
 
     /**
-     * Handle default path requests, redirect to computers list
+     * Handle default path requests, redirect to entries list
      */
     public Result index() {
         return GO_HOME;
     }
 
     /**
-     * Display the paginated list of computers.
+     * Display the paginated list of entries.
      *
      * @param page   Current page number (starts from 0)
      * @param sortBy Column to be sorted
@@ -67,9 +67,9 @@ public class HomeController extends Controller {
     }
 
     /**
-     * Display the 'edit form' of a existing Computer.
+     * Display the 'edit form' of an existing Entry.
      *
-     * @param id Id of the computer to edit
+     * @param id Id of the  edit
      */
     public CompletionStage<Result> edit(Long id) {
 
@@ -79,8 +79,8 @@ public class HomeController extends Controller {
         // Run the lookup also in another thread, then combine the results:
         return computerRepository.lookup(id).thenCombineAsync(companiesFuture, (computerOptional, companies) -> {
             // This is the HTTP rendering thread context
-            Computer c = computerOptional.get();
-            Form<Computer> computerForm = formFactory.form(Computer.class).fill(c);
+            Entry c = computerOptional.get();
+            Form<Entry> computerForm = formFactory.form(Entry.class).fill(c);
             return ok(views.html.editForm.render(id, computerForm, companies));
         }, httpExecutionContext.current());
     }
@@ -91,7 +91,7 @@ public class HomeController extends Controller {
      * @param id Id of the computer to edit
      */
     public CompletionStage<Result> update(Long id) throws PersistenceException {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
+        Form<Entry> computerForm = formFactory.form(Entry.class).bindFromRequest();
         if (computerForm.hasErrors()) {
             // Run companies db operation and then render the failure case
             return companyRepository.options().thenApplyAsync(companies -> {
@@ -99,11 +99,11 @@ public class HomeController extends Controller {
                 return badRequest(views.html.editForm.render(id, computerForm, companies));
             }, httpExecutionContext.current());
         } else {
-            Computer newComputerData = computerForm.get();
+            Entry newComputerData = computerForm.get();
             // Run update operation and then flash and then redirect
             return computerRepository.update(id, newComputerData).thenApplyAsync(data -> {
                 // This is the HTTP rendering thread context
-                flash("success", "Computer " + newComputerData.name + " has been updated");
+                flash("success", "Entry " + newComputerData.name + " has been updated");
                 return GO_HOME;
             }, httpExecutionContext.current());
         }
@@ -113,7 +113,7 @@ public class HomeController extends Controller {
      * Display the 'new computer form'.
      */
     public CompletionStage<Result> create() {
-        Form<Computer> computerForm = formFactory.form(Computer.class);
+        Form<Entry> computerForm = formFactory.form(Entry.class);
         // Run companies db operation and then render the form
         return companyRepository.options().thenApplyAsync((Map<String, String> companies) -> {
             // This is the HTTP rendering thread context
@@ -125,7 +125,7 @@ public class HomeController extends Controller {
      * Handle the 'new computer form' submission
      */
     public CompletionStage<Result> save() {
-        Form<Computer> computerForm = formFactory.form(Computer.class).bindFromRequest();
+        Form<Entry> computerForm = formFactory.form(Entry.class).bindFromRequest();
         if (computerForm.hasErrors()) {
             // Run companies db operation and then render the form
             return companyRepository.options().thenApplyAsync(companies -> {
@@ -134,11 +134,11 @@ public class HomeController extends Controller {
             }, httpExecutionContext.current());
         }
 
-        Computer computer = computerForm.get();
+        Entry computer = computerForm.get();
         // Run insert db operation, then redirect
         return computerRepository.insert(computer).thenApplyAsync(data -> {
             // This is the HTTP rendering thread context
-            flash("success", "Computer " + computer.name + " has been created");
+            flash("success", "Entry " + computer.name + " has been created");
             return GO_HOME;
         }, httpExecutionContext.current());
     }
@@ -150,7 +150,7 @@ public class HomeController extends Controller {
         // Run delete db operation, then redirect
         return computerRepository.delete(id).thenApplyAsync(v -> {
             // This is the HTTP rendering thread context
-            flash("success", "Computer has been deleted");
+            flash("success", "Entry has been deleted");
             return GO_HOME;
         }, httpExecutionContext.current());
     }

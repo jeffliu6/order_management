@@ -8,10 +8,10 @@ import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
- * Computer entity managed by Ebean
+ * Entry entity managed by Ebean
  */
 @Entity 
-public class Computer extends BaseModel {
+public class Entry extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
