@@ -39,7 +39,7 @@ public class EntryRepository {
                 ebeanServer.find(Entry.class).where()
                     .ilike("name", "%" + filter + "%")
                     .orderBy(sortBy + " " + order)
-                    .fetch("company")
+                    .fetch("vendor")
                     .setFirstRow(page * pageSize)
                     .setMaxRows(pageSize)
                     .findPagedList(), executionContext);
@@ -56,7 +56,7 @@ public class EntryRepository {
             try {
             	Entry savedEntry = ebeanServer.find(Entry.class).setId(id).findOne();
                 if (savedEntry != null) {
-                    savedEntry.company = newEntryData.company;
+                    savedEntry.vendor = newEntryData.vendor;
                     savedEntry.end_date = newEntryData.end_date;
                     savedEntry.start_date = newEntryData.start_date;
                     savedEntry.name = newEntryData.name;

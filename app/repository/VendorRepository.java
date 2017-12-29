@@ -2,7 +2,7 @@ package repository;
 
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
-import models.Company;
+import models.Vendor;
 import play.db.ebean.EbeanConfig;
 
 import javax.inject.Inject;
@@ -16,22 +16,22 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 /**
  *
  */
-public class CompanyRepository {
+public class VendorRepository {
 
     private final EbeanServer ebeanServer;
     private final DatabaseExecutionContext executionContext;
 
     @Inject
-    public CompanyRepository(EbeanConfig ebeanConfig, DatabaseExecutionContext executionContext) {
+    public VendorRepository(EbeanConfig ebeanConfig, DatabaseExecutionContext executionContext) {
         this.ebeanServer = Ebean.getServer(ebeanConfig.defaultServer());
         this.executionContext = executionContext;
     }
 
     public CompletionStage<Map<String, String>> options() {
-        return supplyAsync(() -> ebeanServer.find(Company.class).orderBy("name").findList(), executionContext)
+        return supplyAsync(() -> ebeanServer.find(Vendor.class).orderBy("name").findList(), executionContext)
                 .thenApply(list -> {
                     HashMap<String, String> options = new LinkedHashMap<String, String>();
-                    for (Company c : list) {
+                    for (Vendor c : list) {
                         options.put(c.id.toString(), c.name);
                     }
                     return options;

@@ -70,7 +70,7 @@
                     @header("name", "Entry name")
                     @header("start_date", "Start Date")
                     @header("end_date", "End Date")
-                    @header("company.name", "Company")
+                    @header("vendor.name", "Vendor")
                 </tr>
             </thead>
             <tbody>
@@ -93,10 +93,10 @@
                             }
                         </td>
                         <td>
-                            @if(entry.company == null) {
+                            @if(entry.vendor == null) {
                                 <em>-</em>
                             } else {
-                                @entry.company.name
+                                @entry.vendor.name
                             }
                         </td>
                     </tr>

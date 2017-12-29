@@ -25,7 +25,7 @@ public class Entry extends BaseModel {
     public Date end_date;
     
     @ManyToOne
-    public Company company;
+    public Vendor vendor;
     
 }
 

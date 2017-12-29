@@ -7,10 +7,10 @@ import javax.persistence.Entity;
 
 
 /**
- * Company entity managed by Ebean
+ * Vendor entity managed by Ebean
  */
 @Entity 
-public class Company extends BaseModel {
+public class Vendor extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 

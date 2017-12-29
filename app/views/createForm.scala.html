@@ -1,4 +1,4 @@
-@(entryForm: Form[Entry], companies: Map[String, String])
+@(entryForm: Form[Entry], vendors: Map[String, String])
 
 @import helper._
 
@@ -15,9 +15,9 @@
             @inputText(entryForm("end_date"), '_label -> "End date", '_help -> "")
 
             @select(
-                entryForm("company.id"), 
-                options(companies),
-                '_label -> "Company", '_default -> "-- Choose a company --",
+                entryForm("vendor.id"), 
+                options(vendors),
+                '_label -> "Vendor", '_default -> "-- Choose a vendor --",
                 '_showConstraints -> false
             )
         </fieldset>

@@ -7,7 +7,7 @@ import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
-import repository.CompanyRepository;
+import repository.VendorRepository;
 import repository.EntryRepository;
 
 import javax.inject.Inject;
@@ -21,18 +21,18 @@ import java.util.concurrent.CompletionStage;
 public class HomeController extends Controller {
 
     private final EntryRepository entryRepository;
-    private final CompanyRepository companyRepository;
+    private final VendorRepository vendorRepository;
     private final FormFactory formFactory;
     private final HttpExecutionContext httpExecutionContext;
 
     @Inject
     public HomeController(FormFactory formFactory,
                           EntryRepository entryRepository,
-                          CompanyRepository companyRepository,
+                          VendorRepository vendorRepository,
                           HttpExecutionContext httpExecutionContext) {
         this.entryRepository = entryRepository;
         this.formFactory = formFactory;
-        this.companyRepository = companyRepository;
+        this.vendorRepository = vendorRepository;
         this.httpExecutionContext = httpExecutionContext;
     }
 
@@ -74,14 +74,14 @@ public class HomeController extends Controller {
     public CompletionStage<Result> edit(Long id) {
 
         // Run a db operation in another thread (using DatabaseExecutionContext)
-        CompletionStage<Map<String, String>> companiesFuture = companyRepository.options();
+        CompletionStage<Map<String, String>> vendorsFuture = vendorRepository.options();
 
         // Run the lookup also in another thread, then combine the results:
-        return entryRepository.lookup(id).thenCombineAsync(companiesFuture, (entryOptional, companies) -> {
+        return entryRepository.lookup(id).thenCombineAsync(vendorsFuture, (entryOptional, vendors) -> {
             // This is the HTTP rendering thread context
             Entry c = entryOptional.get();
             Form<Entry> entryForm = formFactory.form(Entry.class).fill(c);
-            return ok(views.html.editForm.render(id, entryForm, companies));
+            return ok(views.html.editForm.render(id, entryForm, vendors));
         }, httpExecutionContext.current());
     }
 
@@ -93,10 +93,10 @@ public class HomeController extends Controller {
     public CompletionStage<Result> update(Long id) throws PersistenceException {
         Form<Entry> entryForm = formFactory.form(Entry.class).bindFromRequest();
         if (entryForm.hasErrors()) {
-            // Run companies db operation and then render the failure case
-            return companyRepository.options().thenApplyAsync(companies -> {
+            // Run vendors db operation and then render the failure case
+            return vendorRepository.options().thenApplyAsync(vendors -> {
                 // This is the HTTP rendering thread context
-                return badRequest(views.html.editForm.render(id, entryForm, companies));
+                return badRequest(views.html.editForm.render(id, entryForm, vendors));
             }, httpExecutionContext.current());
         } else {
             Entry newEntryData = entryForm.get();
@@ -114,10 +114,10 @@ public class HomeController extends Controller {
      */
     public CompletionStage<Result> create() {
         Form<Entry> entryForm = formFactory.form(Entry.class);
-        // Run companies db operation and then render the form
-        return companyRepository.options().thenApplyAsync((Map<String, String> companies) -> {
+        // Run vendors db operation and then render the form
+        return vendorRepository.options().thenApplyAsync((Map<String, String> vendors) -> {
             // This is the HTTP rendering thread context
-            return ok(views.html.createForm.render(entryForm, companies));
+            return ok(views.html.createForm.render(entryForm, vendors));
         }, httpExecutionContext.current());
     }
 
@@ -127,10 +127,10 @@ public class HomeController extends Controller {
     public CompletionStage<Result> save() {
         Form<Entry> entryForm = formFactory.form(Entry.class).bindFromRequest();
         if (entryForm.hasErrors()) {
-            // Run companies db operation and then render the form
-            return companyRepository.options().thenApplyAsync(companies -> {
+            // Run vendors db operation and then render the form
+            return vendorRepository.options().thenApplyAsync(vendors -> {
                 // This is the HTTP rendering thread context
-                return badRequest(views.html.createForm.render(entryForm, companies));
+                return badRequest(views.html.createForm.render(entryForm, vendors));
             }, httpExecutionContext.current());
         }
 
