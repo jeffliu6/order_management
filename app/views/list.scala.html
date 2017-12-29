@@ -68,8 +68,8 @@
             <thead>
                 <tr>
                     @header("name", "Entry name")
-                    @header("introduced", "Introduced")
-                    @header("discontinued", "Discontinued")
+                    @header("start_date", "Start Date")
+                    @header("end_date", "End Date")
                     @header("company.name", "Company")
                 </tr>
             </thead>
@@ -79,17 +79,17 @@
                     <tr>
                         <td><a href="@routes.HomeController.edit(entry.id)">@entry.name</a></td>
                         <td>
-                            @if(entry.introduced == null) {
+                            @if(entry.start_date == null) {
                                 <em>-</em>
                             } else {
-                                @entry.introduced.format("dd MMM yyyy")
+                                @entry.start_date.format("dd MMM yyyy")
                             }
                         </td>
                         <td>
-                            @if(entry.discontinued == null) {
+                            @if(entry.end_date == null) {
                                 <em>-</em>
                             } else {
-                                @entry.discontinued.format("dd MMM yyyy")
+                                @entry.end_date.format("dd MMM yyyy")
                             }
                         </td>
                         <td>

@@ -33,7 +33,7 @@ public class ModelTest extends WithApplication {
         await().atMost(1, SECONDS).until(() ->
             assertThat(stage.toCompletableFuture()).isCompletedWithValueMatching(entryOptional -> {
                 final Entry macintosh = entryOptional.get();
-                return (macintosh.name.equals("Macintosh") && formatted(macintosh.introduced).equals("1984-01-24"));
+                return (macintosh.name.equals("Macintosh") && formatted(macintosh.start_date).equals("1984-01-24"));
             })
         );
     }

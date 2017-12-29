@@ -19,10 +19,10 @@ public class Entry extends BaseModel {
     public String name;
     
     @Formats.DateTime(pattern="yyyy-MM-dd")
-    public Date introduced;
+    public Date start_date;
     
     @Formats.DateTime(pattern="yyyy-MM-dd")
-    public Date discontinued;
+    public Date end_date;
     
     @ManyToOne
     public Company company;

@@ -11,8 +11,8 @@ create table company (
 create table entry (
   id                        bigint not null,
   name                      varchar(255),
-  introduced                timestamp,
-  discontinued              timestamp,
+  start_date                timestamp,
+  end_date                  timestamp,
   company_id                bigint,
   constraint pk_entry primary key (id))
 ;

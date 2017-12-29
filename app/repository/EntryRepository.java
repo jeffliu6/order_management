@@ -57,8 +57,8 @@ public class EntryRepository {
             	Entry savedEntry = ebeanServer.find(Entry.class).setId(id).findOne();
                 if (savedEntry != null) {
                     savedEntry.company = newEntryData.company;
-                    savedEntry.discontinued = newEntryData.discontinued;
-                    savedEntry.introduced = newEntryData.introduced;
+                    savedEntry.end_date = newEntryData.end_date;
+                    savedEntry.start_date = newEntryData.start_date;
                     savedEntry.name = newEntryData.name;
 
                     savedEntry.update();

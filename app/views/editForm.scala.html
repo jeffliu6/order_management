@@ -11,8 +11,8 @@
         <fieldset>
             @CSRF.formField
             @inputText(entryForm("name"), '_label -> "Entry name", '_help -> "")
-            @inputText(entryForm("introduced"), '_label -> "Introduced date", '_help -> "")
-            @inputText(entryForm("discontinued"), '_label -> "Discontinued date", '_help -> "")
+            @inputText(entryForm("start_date"), '_label -> "Start date", '_help -> "")
+            @inputText(entryForm("end_date"), '_label -> "End date", '_help -> "")
             
             @select(
                 entryForm("company.id"), 
