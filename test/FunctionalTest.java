@@ -20,27 +20,27 @@ public class FunctionalTest extends WithApplication {
         Result result = route(app, controllers.routes.HomeController.index());
 
         assertThat(result.status()).isEqualTo(SEE_OTHER);
-        assertThat(result.redirectLocation().get()).isEqualTo("/computers");
+        assertThat(result.redirectLocation().get()).isEqualTo("/entries");
     }
 
     @Test
-    public void listComputersOnTheFirstPage() {
+    public void listEntriesOnTheFirstPage() {
         Result result = route(app, controllers.routes.HomeController.list(0, "name", "asc", ""));
 
         assertThat(result.status()).isEqualTo(OK);
-        assertThat(contentAsString(result)).contains("574 computers found");
+        assertThat(contentAsString(result)).contains("574 entries found");
     }
 
     @Test
-    public void filterComputerByName() {
+    public void filterEntryByName() {
         Result result = route(app, controllers.routes.HomeController.list(0, "name", "asc", "Apple"));
 
         assertThat(result.status()).isEqualTo(OK);
-        assertThat(contentAsString(result)).contains("13 computers found");
+        assertThat(contentAsString(result)).contains("13 entries found");
     }
 
     @Test
-    public void createANewComputer() {
+    public void createANewEntry() {
         Result result = route(app, addCSRFToken(fakeRequest().uri(controllers.routes.HomeController.save().url())));
         assertThat(result.status()).isEqualTo(OK);
 
@@ -64,12 +64,12 @@ public class FunctionalTest extends WithApplication {
         result = route(app, fakeRequest().bodyForm(data).method("POST").uri(saveUrl));
 
         assertThat(result.status()).isEqualTo(SEE_OTHER);
-        assertThat(result.redirectLocation().get()).isEqualTo("/computers");
-        assertThat(result.flash().get("success")).isEqualTo("Computer FooBar has been created");
+        assertThat(result.redirectLocation().get()).isEqualTo("/entries");
+        assertThat(result.flash().get("success")).isEqualTo("Entry FooBar has been created");
 
         result = route(app, controllers.routes.HomeController.list(0, "name", "asc", "FooBar"));
         assertThat(result.status()).isEqualTo(OK);
-        assertThat(contentAsString(result)).contains("One computer found");
+        assertThat(contentAsString(result)).contains("One entry found");
     }
 
 }

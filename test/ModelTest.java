@@ -1,10 +1,10 @@
 import io.ebean.PagedList;
-import models.Computer;
+import models.Entry;
 import org.junit.Test;
 import play.Application;
 import play.inject.guice.GuiceApplicationBuilder;
 import play.test.WithApplication;
-import repository.ComputerRepository;
+import repository.EntryRepository;
 
 import java.util.Date;
 import java.util.Optional;
@@ -27,12 +27,12 @@ public class ModelTest extends WithApplication {
 
     @Test
     public void findById() {
-        final ComputerRepository computerRepository = app.injector().instanceOf(ComputerRepository.class);
-        final CompletionStage<Optional<Computer>> stage = computerRepository.lookup(21L);
+        final EntryRepository entryRepository = app.injector().instanceOf(EntryRepository.class);
+        final CompletionStage<Optional<Entry>> stage = entryRepository.lookup(21L);
 
         await().atMost(1, SECONDS).until(() ->
-            assertThat(stage.toCompletableFuture()).isCompletedWithValueMatching(computerOptional -> {
-                final Computer macintosh = computerOptional.get();
+            assertThat(stage.toCompletableFuture()).isCompletedWithValueMatching(entryOptional -> {
+                final Entry macintosh = entryOptional.get();
                 return (macintosh.name.equals("Macintosh") && formatted(macintosh.introduced).equals("1984-01-24"));
             })
         );
@@ -40,15 +40,15 @@ public class ModelTest extends WithApplication {
     
     @Test
     public void pagination() {
-        final ComputerRepository computerRepository = app.injector().instanceOf(ComputerRepository.class);
-        CompletionStage<PagedList<Computer>> stage = computerRepository.page(1, 20, "name", "ASC", "");
+        final EntryRepository entryRepository = app.injector().instanceOf(EntryRepository.class);
+        CompletionStage<PagedList<Entry>> stage = entryRepository.page(1, 20, "name", "ASC", "");
 
         // Test the completed result
         await().atMost(1, SECONDS).until(() ->
-            assertThat(stage.toCompletableFuture()).isCompletedWithValueMatching(computers ->
-                computers.getTotalCount() == 574 &&
-                computers.getTotalPageCount() == 29 &&
-                computers.getList().size() == 20
+            assertThat(stage.toCompletableFuture()).isCompletedWithValueMatching(entries ->
+                entries.getTotalCount() == 574 &&
+                entries.getTotalPageCount() == 29 &&
+                entries.getList().size() == 20
             )
         );
     }

@@ -22,21 +22,21 @@ section#main .topRight {
     top: 70px;
 }
 
-table.computers em {
+table.entries em {
     color: #aaa;
 }
 
-table.computers .introduced, table.computers .discontinued {
+table.entries .introduced, table.entries .discontinued {
     width: 10%;
     min-width: 100px;
 }
 
-table.computers .company_name {
+table.entries .company_name {
     width: 30%;
     min-width: 300px;
 }
 
-table.computers .header a {
+table.entries .header a {
 }
 
 #actions {

@@ -14,23 +14,23 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
  * A repository that executes database operations in a different
  * execution context.
  */
-public class ComputerRepository {
+public class EntryRepository {
 
     private final EbeanServer ebeanServer;
     private final DatabaseExecutionContext executionContext;
 
     @Inject
-    public ComputerRepository(EbeanConfig ebeanConfig, DatabaseExecutionContext executionContext) {
+    public EntryRepository(EbeanConfig ebeanConfig, DatabaseExecutionContext executionContext) {
         this.ebeanServer = Ebean.getServer(ebeanConfig.defaultServer());
         this.executionContext = executionContext;
     }
 
     /**
-     * Return a paged list of computer
+     * Return a paged list of entry
      *
      * @param page     Page to display
-     * @param pageSize Number of computers per page
-     * @param sortBy   Computer property used for sorting
+     * @param pageSize Number of entries per page
+     * @param sortBy   Entry property used for sorting
      * @param order    Sort order (either or asc or desc)
      * @param filter   Filter applied on the name column
      */
@@ -49,19 +49,19 @@ public class ComputerRepository {
         return supplyAsync(() -> Optional.ofNullable(ebeanServer.find(Entry.class).setId(id).findOne()), executionContext);
     }
 
-    public CompletionStage<Optional<Long>> update(Long id, Entry newComputerData) {
+    public CompletionStage<Optional<Long>> update(Long id, Entry newEntryData) {
         return supplyAsync(() -> {
             Transaction txn = ebeanServer.beginTransaction();
             Optional<Long> value = Optional.empty();
             try {
-            	Entry savedComputer = ebeanServer.find(Entry.class).setId(id).findOne();
-                if (savedComputer != null) {
-                    savedComputer.company = newComputerData.company;
-                    savedComputer.discontinued = newComputerData.discontinued;
-                    savedComputer.introduced = newComputerData.introduced;
-                    savedComputer.name = newComputerData.name;
+            	Entry savedEntry = ebeanServer.find(Entry.class).setId(id).findOne();
+                if (savedEntry != null) {
+                    savedEntry.company = newEntryData.company;
+                    savedEntry.discontinued = newEntryData.discontinued;
+                    savedEntry.introduced = newEntryData.introduced;
+                    savedEntry.name = newEntryData.name;
 
-                    savedComputer.update();
+                    savedEntry.update();
                     txn.commit();
                     value = Optional.of(id);
                 }
@@ -75,20 +75,20 @@ public class ComputerRepository {
     public CompletionStage<Optional<Long>>  delete(Long id) {
         return supplyAsync(() -> {
             try {
-                final Optional<Entry> computerOptional = Optional.ofNullable(ebeanServer.find(Entry.class).setId(id).findOne());
-                computerOptional.ifPresent(Model::delete);
-                return computerOptional.map(c -> c.id);
+                final Optional<Entry> entryOptional = Optional.ofNullable(ebeanServer.find(Entry.class).setId(id).findOne());
+                entryOptional.ifPresent(Model::delete);
+                return entryOptional.map(c -> c.id);
             } catch (Exception e) {
                 return Optional.empty();
             }
         }, executionContext);
     }
 
-    public CompletionStage<Long> insert(Entry computer) {
+    public CompletionStage<Long> insert(Entry entry) {
         return supplyAsync(() -> {
-             computer.id = System.currentTimeMillis(); // not ideal, but it works
-             ebeanServer.insert(computer);
-             return computer.id;
+             entry.id = System.currentTimeMillis(); // not ideal, but it works
+             ebeanServer.insert(entry);
+             return entry.id;
         }, executionContext);
     }
 }
