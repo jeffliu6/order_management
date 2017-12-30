@@ -5,6 +5,7 @@
 create table vendor (
   id                        bigint not null,
   name                      varchar(255),
+  url                       varchar(255),
   constraint pk_vendor primary key (id))
 ;
 
