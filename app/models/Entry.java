@@ -27,5 +27,8 @@ public class Entry extends BaseModel {
     @ManyToOne
     public Vendor vendor;
     
+    //@ManyToOne
+    //public Department department;
+    
 }
 
