@@ -2,9 +2,9 @@
 
 # --- !Ups
 
-insert into department (id, name) values (1,'Research');
-insert into department (id, name) values (2,'Analytical');
-insert into department (id, name) values (3,'PD');
+insert into dept (id, name) values (1,'Research');
+insert into dept (id, name) values (2,'Analytical');
+insert into dept (id, name) values (3,'PD');
 
 insert into vendor (id,name,url) values (  1,'Apple Inc.','apple.com');
 insert into vendor (id,name,url) values (  2,'Dell','dell.com');
@@ -22,4 +22,4 @@ insert into entry (id,name,request_date,dept_id,start_date,end_date,vendor_id) v
 
 delete from entry;
 delete from vendor;
-delete from department;
+delete from dept;
