@@ -1,4 +1,4 @@
-@(id: Long, entryForm: Form[Entry], vendors: Map[String, String])
+@(id: Long, entryForm: Form[Entry], vendors: Map[String, String], depts: Map[String,String])
 
 @import helper._
 
@@ -18,6 +18,14 @@
                 entryForm("vendor.id"), 
                 options(vendors),
                 '_label -> "Vendor", '_default -> "-- Choose a vendor --",
+                '_showConstraints -> false
+            )
+            
+                        
+            @select(
+                entryForm("dept.id"), 
+                options(depts),
+                '_label -> "Department", '_default -> "-- Choose a department --",
                 '_showConstraints -> false
             )
         

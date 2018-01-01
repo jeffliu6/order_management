@@ -60,6 +60,7 @@ public class EntryRepository {
                     savedEntry.end_date = newEntryData.end_date;
                     savedEntry.start_date = newEntryData.start_date;
                     savedEntry.name = newEntryData.name;
+                    savedEntry.dept = newEntryData.dept;
 
                     savedEntry.update();
                     txn.commit();
