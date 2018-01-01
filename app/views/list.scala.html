@@ -71,6 +71,7 @@
                     @header("start_date", "Start Date")
                     @header("end_date", "End Date")
                     @header("vendor.name", "Vendor")
+                    @header("dept.name", "Department")
                 </tr>
             </thead>
             <tbody>
@@ -97,6 +98,13 @@
                                 <em>-</em>
                             } else {
                                 @entry.vendor.name
+                            }
+                        </td>
+                        <td>
+                            @if(entry.dept == null) {
+                                <em>-</em>
+                            } else {
+                                @entry.dept.name
                             }
                         </td>
                     </tr>
