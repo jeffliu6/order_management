@@ -59,6 +59,7 @@ public class HomeController extends Controller {
 	/**
 	 * Handle default path requests, redirect to entries list
 	 */
+	@SubjectNotPresent
 	public Result index() {
 		return GO_HOME;
 	}
