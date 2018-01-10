@@ -59,7 +59,6 @@ public class HomeController extends Controller {
 	/**
 	 * Handle default path requests, redirect to entries list
 	 */
-	@SubjectNotPresent
 	public Result index() {
 		return GO_HOME;
 	}
@@ -103,7 +102,7 @@ public class HomeController extends Controller {
 		Pair<CompletionStage<Map<String, String>>,CompletionStage<Map<String, String>>> tempPair = new Pair<CompletionStage<Map<String, String>>,CompletionStage<Map<String, String>>>(vendorsFuture,deptsFuture);
 		CompletableFuture<Pair<CompletionStage<Map<String, String>>,CompletionStage<Map<String, String>>>> myFuture = CompletableFuture.completedFuture(tempPair);
 
-		return entryRepository.lookup(id).thenCombineAsync(myFuture, 
+		return entryRepository.lookup(id).thenCombineAsync(myFuture,
 				(entryOptional, myPair) -> {
 					// This is the HTTP rendering thread context
 					Map<String,String> x;
@@ -117,7 +116,7 @@ public class HomeController extends Controller {
 						x = new HashMap<String,String>();
 						y = new HashMap<String,String>();
 					}
-					
+
 					Entry c = entryOptional.get();
 					Form<Entry> entryForm = formFactory.form(Entry.class).fill(c);
 					return ok(views.html.editForm.render(id, entryForm, x,y));//myPair.a.toCompletableFuture().getNow(new HashMap<String,String>()), myPair.b.toCompletableFuture().getNow(new HashMap<String,String>())));
@@ -151,7 +150,7 @@ public class HomeController extends Controller {
 					x = new HashMap<String,String>();
 					y = new HashMap<String,String>();
 				}
-				
+
 				return badRequest(views.html.editForm.render(id, entryForm, x, y));//myPair.a.toCompletableFuture().getNow(new HashMap<String,String>()), myPair.b.toCompletableFuture().getNow(new HashMap<String,String>())));
 			}, httpExecutionContext.current());
 		} else {
@@ -218,7 +217,7 @@ public class HomeController extends Controller {
 					x = new HashMap<String,String>();
 					y = new HashMap<String,String>();
 				}
-				
+
 				return badRequest(views.html.createForm.render(entryForm, x,y));//myPair.a.toCompletableFuture().getNow(new HashMap<String,String>()), myPair.a.toCompletableFuture().getNow(new HashMap<String,String>())));
 			}, httpExecutionContext.current());
 		}
@@ -245,4 +244,3 @@ public class HomeController extends Controller {
 	}
 
 }
-
