@@ -63,15 +63,7 @@ public class HomeController extends Controller {
 		return GO_HOME;
 	}
 
-	/*
-	 * Handle logins
-	 */
-	public Result login() {
-		return ok(
-			views.html.login.render()
-		);
-	}
-
+	
 	/**
 	 * Display the paginated list of entries.
 	 *
