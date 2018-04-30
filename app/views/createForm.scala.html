@@ -1,0 +1,40 @@
+@(entryForm: Form[Entry], vendors: Map[String, String], depts: Map[String,String])
+
+@import helper._
+
+@main {
+    
+    <h1>Add a entry</h1>
+    
+    @form(routes.HomeController.save()) {
+        
+        <fieldset>
+            @CSRF.formField
+            @inputText(entryForm("name"), '_label -> "Entry name", '_help -> "")
+            @inputText(entryForm("start_date"), '_label -> "Start date", '_help -> "")
+            @inputText(entryForm("end_date"), '_label -> "End date", '_help -> "")
+
+            @select(
+                entryForm("vendor.id"), 
+                options(vendors),
+                '_label -> "Vendor", '_default -> "-- Choose a vendor --",
+                '_showConstraints -> false
+            )
+            
+            @select(
+                entryForm("dept.id"), 
+                options(depts),
+                '_label -> "Department", '_default -> "-- Choose a department --",
+                '_showConstraints -> false
+            )
+
+        </fieldset>
+        
+        <div class="actions">
+            <input type="submit" value="Create this entry" class="btn primary"> or 
+            <a href="@routes.HomeController.list()" class="btn">Cancel</a>
+        </div>
+        
+    }
+    
+}

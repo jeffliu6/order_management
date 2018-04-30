@@ -1,0 +1,5 @@
+# Messages
+
+entries.list.title={0,choice,0#No entries|1#One entry|1<{0,number,integer} entries} found
+
+
